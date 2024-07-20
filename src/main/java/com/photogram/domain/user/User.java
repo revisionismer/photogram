@@ -4,9 +4,11 @@ import java.time.LocalDateTime;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.photogram.constant.user.UserEnum;
+import com.photogram.web.dto.user.UserReqDto.UserUpdateReqDto;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -83,7 +85,7 @@ public class User {
 	} 
 	
 	@Builder
-	public User(Long id, String username, String password, String email, String name, UserEnum role, LocalDateTime createDate, LocalDateTime updatedDate) {
+	public User(Long id, String username, String password, String name, String email, UserEnum role, LocalDateTime createDate, LocalDateTime updatedDate) {
 		this.id = id;
 		this.username = username;
 		this.password = password;
@@ -94,4 +96,13 @@ public class User {
 		this.updatedDate = updatedDate;
 	}
 	
+	public void update(UserUpdateReqDto userUpdateReqDto, PasswordEncoder passwordEncoder) {
+		this.name = userUpdateReqDto.getName();
+		this.password = passwordEncoder.encode(userUpdateReqDto.getPassword());
+		this.website = userUpdateReqDto.getWebsite();
+		this.bio = userUpdateReqDto.getBio();
+		this.phone = userUpdateReqDto.getPhone();
+		this.gender = userUpdateReqDto.getGender();
+		this.updatedDate = LocalDateTime.now();
+	}
 }

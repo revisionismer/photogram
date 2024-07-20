@@ -70,16 +70,30 @@ public class UserRespDto {
 	public static class UserUpdateRespDto {
 		private Long id;
 		private String username;
+		private String name;
+		private String password;
+		private String website;
+		private String bio;
+		private String phone;
+		private String gender;
 		private String email;
 		private String role;
 		private String profileImageUrl;
 		
 		public UserUpdateRespDto(User userEntity) {
+			
 			this.id = userEntity.getId();
 			this.username = userEntity.getUsername();
+			this.password = userEntity.getPassword();
+			this.name = userEntity.getName();
+			this.website = userEntity.getWebsite();
+			this.bio = userEntity.getBio();
 			this.email = userEntity.getEmail();
-			this.role = userEntity.getRole().getValue();
+			this.phone = userEntity.getPhone();
+			this.gender = userEntity.getGender();
 			this.profileImageUrl = userEntity.getProfileImageUrl();
+			this.role = userEntity.getRole().getValue();
+
 		}
 	}
 	
