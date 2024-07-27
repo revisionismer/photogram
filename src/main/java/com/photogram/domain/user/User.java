@@ -62,7 +62,7 @@ public class User {
 	@CreatedDate
  	@JsonFormat(pattern = "yyyy-MM-dd HH:mm")
  	@Column(nullable = false)
- 	private LocalDateTime createDate;  // 1-12. 생성일자
+ 	private LocalDateTime createdDate;  // 1-12. 생성일자
  	 
  	@LastModifiedDate
  	@JsonFormat(pattern = "yyyy-MM-dd HH:mm")
@@ -81,18 +81,18 @@ public class User {
 	public String toString() {
 		return "User [id=" + id + ", username=" + username + ", password=" + password + ", name=" + name + ", website="
 				+ website + ", bio=" + bio + ", email=" + email + ", phone=" + phone + ", gender=" + gender
-				+ ", profileImageUrl=" + profileImageUrl + ", role=" + role + ", createDate=" + createDate + "]";
+				+ ", profileImageUrl=" + profileImageUrl + ", role=" + role + ", createdDate=" + createdDate + "]";
 	} 
 	
 	@Builder
-	public User(Long id, String username, String password, String name, String email, UserEnum role, LocalDateTime createDate, LocalDateTime updatedDate) {
+	public User(Long id, String username, String password, String name, String email, UserEnum role, LocalDateTime createdDate, LocalDateTime updatedDate) {
 		this.id = id;
 		this.username = username;
 		this.password = password;
 		this.email = email;
 		this.name = name;
 		this.role = role;
-		this.createDate = createDate;
+		this.createdDate = createdDate;
 		this.updatedDate = updatedDate;
 	}
 	

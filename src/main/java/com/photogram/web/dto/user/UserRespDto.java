@@ -23,6 +23,13 @@ public class UserRespDto {
 		private String phone;
 		private String gender;
 		
+		private boolean isPageOwner;
+		
+		private boolean subscribeState;
+		private int subscribeCount;
+		
+		public UserInfoRespDto() {}
+		
 		public UserInfoRespDto(User userEntity) {
 			this.id = userEntity.getId();
 			this.username = userEntity.getUsername();
@@ -34,6 +41,24 @@ public class UserRespDto {
 			this.bio = userEntity.getBio();
 			this.phone = userEntity.getPhone();
 			this.gender = userEntity.getGender();
+		}
+		
+		public UserInfoRespDto(User userEntity, boolean subscribeState, int subscribeCount, boolean isPageOwner) {
+			this.id = userEntity.getId();
+			this.username = userEntity.getUsername();
+			this.email = userEntity.getEmail();
+			this.role = userEntity.getRole().getValue();
+			this.profileImageUrl = userEntity.getProfileImageUrl();
+			this.name = userEntity.getName();
+			this.website = userEntity.getWebsite();
+			this.bio = userEntity.getBio();
+			this.phone = userEntity.getPhone();
+			this.gender = userEntity.getGender();
+			
+			this.subscribeState = subscribeState;
+			this.subscribeCount = subscribeCount;
+			
+			this.isPageOwner = isPageOwner;
 		}
 	}
 	

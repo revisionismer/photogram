@@ -45,12 +45,14 @@ public class UserApiController {
 		return new ResponseEntity<>(new ResponseDto<>(1, "로그인 유저 정보 조회 성공", userInfoRespDto), HttpStatus.OK);
 	}
 	
-	@GetMapping("/s/{id}/info")
-	public ResponseEntity<?> userInfoByuserId(@PathVariable("id") Long id, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+	@GetMapping("/s/{pageUserId}/info")
+	public ResponseEntity<?> userInfoById(@PathVariable("pageUserId") Long pageUserId, @AuthenticationPrincipal PrincipalDetails principalDetails) {
 		
-		UserInfoRespDto userInfoRespDto = userService.readUserInfo(id);
+		User loginUser = principalDetails.getUser();
 		
-		return new ResponseEntity<>(new ResponseDto<>(1, id + "번 유저 정보 조회 성공", userInfoRespDto), HttpStatus.OK);
+		UserInfoRespDto userInfoRespDto = userService.readUserInfoByUserId(pageUserId, loginUser.getId());
+		
+		return new ResponseEntity<>(new ResponseDto<>(1, pageUserId + "번 유저 정보 조회 성공", userInfoRespDto), HttpStatus.OK);
 	}
 	
 	@GetMapping("/list")
@@ -60,16 +62,7 @@ public class UserApiController {
 		
 		return new ResponseEntity<>(new ResponseDto<>(1, "유저 리스트 정보 조회 성공", result), HttpStatus.OK);
 	}
-	
-	// 2024-07-12 : @PathVariable 사용시 이름을 항시 명시해줘야 한다.
-	@GetMapping("/{userId}")
-	public ResponseEntity<?> userInfoByUserId(@PathVariable("userId") Long id, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-		
-		UserInfoRespDto userInfoRespDto = userService.readUserInfoByUserId(id);
-		
-		return new ResponseEntity<>(new ResponseDto<>(1, "유저 리스트 정보 조회 성공", userInfoRespDto), HttpStatus.OK);
-	}
-	
+
 	@PutMapping("/s/update")
 	public ResponseEntity<?> userInfoUpdate(@RequestBody @Valid UserUpdateReqDto userUpdateReqDto, @AuthenticationPrincipal PrincipalDetails principalDetails) {
 		
