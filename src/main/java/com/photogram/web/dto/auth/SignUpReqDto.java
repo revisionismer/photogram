@@ -37,7 +37,7 @@ public class SignUpReqDto {
 				.role(username.equals("admin") ? UserEnum.ADMIN : UserEnum.USER)
 				.name(name)
 				.email(email)
-				.createDate(LocalDateTime.now())
+				.createdDate(LocalDateTime.now())
 				.build();
 	}
 	

@@ -63,7 +63,7 @@ dependencies {
 	/* 12. JPA */ 
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	
-	/* 13. QLRM */
+	/* 13. QLRM : 추후에 4.0.1로 버전업 해와야함.*/
 	implementation group: 'org.qlrm', name: 'qlrm', version: '3.0.4'
 	
 	/* 14. 파일업로드 - Apache Commons File Upload */

@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.photogram.domain.subscribe.SubscribeRepository;
 import com.photogram.domain.user.User;
 import com.photogram.domain.user.UserRepository;
 import com.photogram.handler.exception.CustomApiException;
@@ -33,6 +34,8 @@ public class UserService {
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
 	
+	private final SubscribeRepository subscribeRepository;
+	
 	@Value("${profileImg.path}")
 	private String uploadFolder;
 	
@@ -44,8 +47,11 @@ public class UserService {
 						
 		if(userOp.isPresent()) {
 			User findUser = userOp.get();
+			
+			int subscribeCount = subscribeRepository.mSubscribeCount(principalId);
+			int subscribeState = subscribeRepository.mSubscribeState(principalId, principalId);
 							
-			return new UserInfoRespDto(findUser);
+			return new UserInfoRespDto(findUser, subscribeState == 1 ? true : false, subscribeCount, true);
 							
 		} else {
 			throw new CustomApiException("해당 유저가 존재하지 않습니다.");
@@ -68,14 +74,17 @@ public class UserService {
 		
 	}
 	
-	public UserInfoRespDto readUserInfoByUserId(Long id) {
+	public UserInfoRespDto readUserInfoByUserId(Long pageUserId, Long principalId) {
 		
-		Optional<User> userOp = userRepository.findById(id);
+		Optional<User> userOp = userRepository.findById(pageUserId);
 		
 		if(userOp.isPresent()) {
 			User findUser = userOp.get();
 			
-			return new UserInfoRespDto(findUser);
+			int subscribeCount = subscribeRepository.mSubscribeCount(pageUserId);
+			int subscribeState = subscribeRepository.mSubscribeState(principalId, pageUserId);
+							
+			return new UserInfoRespDto(findUser, subscribeState == 1 ? true : false, subscribeCount, principalId == pageUserId ? true : false);
 			
 		} else {
 			throw new CustomApiException("해당 유저가 존재하지 않습니다.");
