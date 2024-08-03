@@ -1,6 +1,9 @@
 package com.photogram.web.dto.user;
 
+import java.util.List;
+
 import com.photogram.domain.user.User;
+import com.photogram.web.dto.image.ImageRespDto;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -28,6 +31,10 @@ public class UserRespDto {
 		private boolean subscribeState;
 		private int subscribeCount;
 		
+		private int totalStoryCount;
+		
+		private List<ImageRespDto> images;
+		
 		public UserInfoRespDto() {}
 		
 		public UserInfoRespDto(User userEntity) {
@@ -43,7 +50,7 @@ public class UserRespDto {
 			this.gender = userEntity.getGender();
 		}
 		
-		public UserInfoRespDto(User userEntity, boolean subscribeState, int subscribeCount, boolean isPageOwner) {
+		public UserInfoRespDto(User userEntity, boolean subscribeState, int subscribeCount, boolean isPageOwner, List<ImageRespDto> images) {
 			this.id = userEntity.getId();
 			this.username = userEntity.getUsername();
 			this.email = userEntity.getEmail();
@@ -59,6 +66,10 @@ public class UserRespDto {
 			this.subscribeCount = subscribeCount;
 			
 			this.isPageOwner = isPageOwner;
+			
+			this.totalStoryCount = images.size();
+			this.images = images;
+			
 		}
 	}
 	
