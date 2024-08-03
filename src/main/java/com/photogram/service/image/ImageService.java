@@ -6,12 +6,16 @@ import java.nio.file.Paths;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.photogram.domain.image.Image;
 import com.photogram.domain.image.ImageRepository;
 import com.photogram.domain.user.User;
+import com.photogram.web.dto.image.ImageRespDto;
+import com.photogram.web.dto.image.ImageStoryListRespDto;
 import com.photogram.web.dto.image.ImageUploadReqDto;
 import com.photogram.web.dto.image.ImageUploadRespDto;
 
@@ -23,7 +27,7 @@ import lombok.RequiredArgsConstructor;
 public class ImageService {
 	
 	private final ImageRepository imageRepository;
-	
+
 	@Value("${storyImg.path}")
 	private String uploadFolder;
 
@@ -58,5 +62,19 @@ public class ImageService {
 		Image storyImage = imageRepository.save(image);
 		
 		return new ImageUploadRespDto(storyImage, loginUser);
+	}
+	
+	public ImageStoryListRespDto imageStoryList(User loginUser, Pageable pageable) {
+		
+		Page<Image> images = imageRepository.mStory(loginUser.getId(), pageable);
+		
+		Page<ImageRespDto> result = images.map( image -> new ImageRespDto(image));
+		
+		if(result.getContent().size() == 0) {
+			return new ImageStoryListRespDto();
+		} 
+		
+		return new ImageStoryListRespDto(result, result.getContent().size());
+		
 	}
 }

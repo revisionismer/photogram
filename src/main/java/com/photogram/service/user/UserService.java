@@ -15,10 +15,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.photogram.domain.image.Image;
+import com.photogram.domain.image.ImageRepository;
 import com.photogram.domain.subscribe.SubscribeRepository;
 import com.photogram.domain.user.User;
 import com.photogram.domain.user.UserRepository;
 import com.photogram.handler.exception.CustomApiException;
+import com.photogram.web.dto.image.ImageRespDto;
 import com.photogram.web.dto.user.UserReqDto.UserUpdateReqDto;
 import com.photogram.web.dto.user.UserRespDto.UserInfoRespDto;
 import com.photogram.web.dto.user.UserRespDto.UserProfileRespDto;
@@ -36,6 +39,8 @@ public class UserService {
 	
 	private final SubscribeRepository subscribeRepository;
 	
+	private final ImageRepository imageRepository;
+	
 	@Value("${profileImg.path}")
 	private String uploadFolder;
 	
@@ -50,8 +55,13 @@ public class UserService {
 			
 			int subscribeCount = subscribeRepository.mSubscribeCount(principalId);
 			int subscribeState = subscribeRepository.mSubscribeState(principalId, principalId);
-							
-			return new UserInfoRespDto(findUser, subscribeState == 1 ? true : false, subscribeCount, true);
+			
+			List<Image> images = imageRepository.findAllByUserId(principalId);
+			
+			// 2024-08-01
+			List<ImageRespDto> imagesDto = images.stream().map( (image) -> new ImageRespDto(image)).toList();
+			
+			return new UserInfoRespDto(findUser, subscribeState == 1 ? true : false, subscribeCount, true, imagesDto);
 							
 		} else {
 			throw new CustomApiException("해당 유저가 존재하지 않습니다.");
@@ -81,10 +91,15 @@ public class UserService {
 		if(userOp.isPresent()) {
 			User findUser = userOp.get();
 			
+			List<Image> images = imageRepository.findAllByUserId(pageUserId);
+			
 			int subscribeCount = subscribeRepository.mSubscribeCount(pageUserId);
 			int subscribeState = subscribeRepository.mSubscribeState(principalId, pageUserId);
-							
-			return new UserInfoRespDto(findUser, subscribeState == 1 ? true : false, subscribeCount, principalId == pageUserId ? true : false);
+			
+			// 2024-08-01
+			List<ImageRespDto> imagesDto = images.stream().map( (image) -> new ImageRespDto(image)).toList();
+			
+			return new UserInfoRespDto(findUser, subscribeState == 1 ? true : false, subscribeCount, principalId == pageUserId ? true : false, imagesDto);
 			
 		} else {
 			throw new CustomApiException("해당 유저가 존재하지 않습니다.");
