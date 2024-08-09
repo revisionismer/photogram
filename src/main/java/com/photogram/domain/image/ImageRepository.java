@@ -13,6 +13,9 @@ public interface ImageRepository extends JpaRepository<Image, Long> {
 	@Query(value = "SELECT * FROM image_tb WHERE userId IN (SELECT toUserId FROM subscribe_tb WHERE fromUserId = :principalId)", nativeQuery = true)
 	Page<Image> mStory(@Param(value = "principalId") Long principalId, Pageable pageable);
 	
+	@Query(value = "SELECT * FROM image_tb WHERE userId IN (SELECT toUserId FROM subscribe_tb WHERE fromUserId = :principalId)", nativeQuery = true)
+	List<Image> mStory(@Param(value = "principalId") Long principalId);
+	
 	List<Image> findAllByUserId(Long userId);
 	
 }
