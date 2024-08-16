@@ -16,11 +16,11 @@ public class LikesRespDto {
 	
 	private String message;
 	
-	public LikesRespDto(Long imageId, Long principalId, int totalLikeCount) {
+	public LikesRespDto(Long imageId, Long principalId, String message, int totalLikeCount) {
 		
 		this.imageId = imageId;
 		this.principalId = principalId;
-		this.message = principalId + "번 유저가 " + imageId + "번 스토리 좋아요 성공";
+		this.message = message;
 		this.totalLikeCount = totalLikeCount;
 	}
 	

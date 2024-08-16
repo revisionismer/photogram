@@ -109,9 +109,11 @@ public class ImageService {
 			
 			likesRepository.mLikes(findImage.getId(), principalId);
 			
+			String message = principalId + "번 유저가 " + imageId + "번 스토리 좋아요 성공";
+			
 			int totalLikeCount = likesRepository.mTotalLikeCount(imageId);
 			
-			return new LikesRespDto(findImage.getId(), principalId, totalLikeCount);
+			return new LikesRespDto(findImage.getId(), principalId, message, totalLikeCount);
 		} else {
 			throw new CustomApiException("이미지가 존재하지 않습니다.");
 		}
@@ -128,9 +130,11 @@ public class ImageService {
 			
 			likesRepository.mUnLikes(findImage.getId(), principalId);
 			
+			String message = principalId + "번 유저가 " + imageId + "번 스토리 좋아요 취소 성공";
+			
 			int totalLikeCount = likesRepository.mTotalLikeCount(imageId);
 			
-			return new LikesRespDto(findImage.getId(), principalId, totalLikeCount);
+			return new LikesRespDto(findImage.getId(), principalId, message, totalLikeCount);
 		} else {
 			throw new CustomApiException("이미지가 존재하지 않습니다.");
 		}
