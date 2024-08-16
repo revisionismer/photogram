@@ -3,6 +3,7 @@ package com.photogram.service.image;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -13,11 +14,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.photogram.domain.image.Image;
 import com.photogram.domain.image.ImageRepository;
+import com.photogram.domain.likes.LikesRepository;
 import com.photogram.domain.user.User;
+import com.photogram.handler.exception.CustomApiException;
 import com.photogram.web.dto.image.ImageRespDto;
 import com.photogram.web.dto.image.ImageStoryListRespDto;
 import com.photogram.web.dto.image.ImageUploadReqDto;
 import com.photogram.web.dto.image.ImageUploadRespDto;
+import com.photogram.web.dto.likes.LikesRespDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -27,6 +31,8 @@ import lombok.RequiredArgsConstructor;
 public class ImageService {
 	
 	private final ImageRepository imageRepository;
+	
+	private final LikesRepository likesRepository;
 
 	@Value("${storyImg.path}")
 	private String uploadFolder;
@@ -68,6 +74,21 @@ public class ImageService {
 		
 		Page<Image> images = imageRepository.mStory(loginUser.getId(), pageable);
 		
+		// 2024-08-12 : 좋아요 서비스 진행중
+		images.forEach((image) -> {
+			// 4-2. 이미지에 담겨있는 좋아요 데이터 가져오기
+			image.getLikes().forEach((like) -> {
+				// 4-3. 해당 이미지를 좋아요한 사람이 현재 로그인한 유저라면
+				if(like.getUser().getId() == loginUser.getId()) {
+					// 4-4. 좋아요를 한 유저가 로그인한 유저라면 좋아요 상태 값을 true로 세팅 -> 로그인한 유저라면 story 페이지에서  이미지의 좋아요 하트 색깔을 빨간색으로 표시해주기 위해
+					image.setLikeState(true);
+				}
+				
+				image.setLikeCount(image.getLikes().size());
+			});
+			
+		});
+		
 		Page<ImageRespDto> result = images.map( image -> new ImageRespDto(image));
 		
 		if(result.getContent().size() == 0) {
@@ -77,4 +98,45 @@ public class ImageService {
 		return new ImageStoryListRespDto(result, result.getContent().size());
 		
 	}
+	
+	public LikesRespDto likeImageStory(Long imageId, Long principalId) {
+		// 2024-08-13 : 좋아요 서비스 구현
+		Optional<Image> imageOp = imageRepository.findById(imageId);
+		
+		if(imageOp.isPresent()) {
+		
+			Image findImage = imageOp.get();
+			
+			likesRepository.mLikes(findImage.getId(), principalId);
+			
+			int totalLikeCount = likesRepository.mTotalLikeCount(imageId);
+			
+			return new LikesRespDto(findImage.getId(), principalId, totalLikeCount);
+		} else {
+			throw new CustomApiException("이미지가 존재하지 않습니다.");
+		}
+		
+	}
+	
+	public LikesRespDto unLikeImageStory(Long imageId, Long principalId) {
+
+		Optional<Image> imageOp = imageRepository.findById(imageId);
+		
+		if(imageOp.isPresent()) {
+		
+			Image findImage = imageOp.get();
+			
+			likesRepository.mUnLikes(findImage.getId(), principalId);
+			
+			int totalLikeCount = likesRepository.mTotalLikeCount(imageId);
+			
+			return new LikesRespDto(findImage.getId(), principalId, totalLikeCount);
+		} else {
+			throw new CustomApiException("이미지가 존재하지 않습니다.");
+		}
+		
+	}
+	
+	
+	
 }

@@ -14,7 +14,7 @@ public class ImageStoryListRespDto {
 
 	private Page<ImageRespDto> images;
 	private int totalCount;
-	
+
 	public ImageStoryListRespDto(Page<ImageRespDto> images, int totalCount) {
 		this.images = images;
 		this.totalCount = totalCount;
