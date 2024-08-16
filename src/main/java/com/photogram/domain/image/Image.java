@@ -1,11 +1,14 @@
 package com.photogram.domain.image;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.photogram.domain.likes.Likes;
 import com.photogram.domain.user.User;
 
 import jakarta.persistence.Column;
@@ -16,7 +19,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -44,6 +49,16 @@ public class Image {
 	@JoinColumn(name = "userId")
 	@ManyToOne(fetch = FetchType.EAGER)
 	private User user;  // 2-5. 유저 정보
+	
+	@JsonIgnoreProperties({"image"})
+	@OneToMany(mappedBy = "image")
+	private List<Likes> likes; // 2-8. 좋아요 리스트
+	
+	@Transient  // DB에 컬럼을 만들지 않는다.
+	private Boolean likeState;  // 2-9. 좋아요 상태
+	
+	@Transient  // DB에 컬럼을 만들지 않는다.
+	private int likeCount;  // 2-10. 좋아요 수
 	
 	@CreatedDate
  	@JsonFormat(pattern = "yyyy-MM-dd HH:mm")

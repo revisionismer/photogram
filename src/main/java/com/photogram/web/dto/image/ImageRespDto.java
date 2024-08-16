@@ -24,6 +24,10 @@ public class ImageRespDto {
 	
 	private String profileImageUrl;
 	
+	private Boolean likeState;  // 2-5. 게시글 좋아요 여부(본인)
+	
+	private int totalLikeCount; // 2-6. 게시글 좋아요 총 갯수
+	
 	public ImageRespDto(Image image) {
 		this.imageId = image.getId();
 		this.caption = image.getCaption();
@@ -32,6 +36,8 @@ public class ImageRespDto {
 		this.userId = image.getUser().getId();
 		this.username = image.getUser().getUsername();
 		this.profileImageUrl = image.getUser().getProfileImageUrl();
+		this.likeState = image.getLikeState();
+		this.totalLikeCount = image.getLikeCount();
 		
 	}
 }
