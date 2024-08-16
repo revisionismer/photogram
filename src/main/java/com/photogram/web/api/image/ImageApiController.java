@@ -7,7 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -21,6 +23,7 @@ import com.photogram.web.dto.ResponseDto;
 import com.photogram.web.dto.image.ImageStoryListRespDto;
 import com.photogram.web.dto.image.ImageUploadReqDto;
 import com.photogram.web.dto.image.ImageUploadRespDto;
+import com.photogram.web.dto.likes.LikesRespDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -51,5 +54,25 @@ public class ImageApiController {
 		ImageStoryListRespDto imageStoryListRespDto = imageService.imageStoryList(loginUser, pageable);
 		
 		return new ResponseEntity<>(new ResponseDto<>(1, "이미지 스토리 리스트 불러오기 성공", imageStoryListRespDto), HttpStatus.OK);
+	}
+	
+	@PostMapping("/s/story/{imageId}/like")
+	public ResponseEntity<?> likeStory(@PathVariable("imageId") Long imageId, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+		
+		User loginUser = principalDetails.getUser();
+		
+		LikesRespDto likesRespDto = imageService.likeImageStory(imageId, loginUser.getId());
+		
+		return new ResponseEntity<>(new ResponseDto<>(1, "이미지 스토리 좋아요 성공", likesRespDto), HttpStatus.OK);
+	}
+	
+	@DeleteMapping("/s/story/{imageId}/unlike")
+	public ResponseEntity<?> unlikeStory(@PathVariable("imageId") Long imageId, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+		
+		User loginUser = principalDetails.getUser();
+		
+		LikesRespDto likesRespDto = imageService.unLikeImageStory(imageId, loginUser.getId());
+		
+		return new ResponseEntity<>(new ResponseDto<>(1, "이미지 스토리 좋아요 취소 성공", likesRespDto), HttpStatus.OK);
 	}
 }
