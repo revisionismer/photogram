@@ -43,7 +43,7 @@ public class CommentApiController {
  	
 		CommentRespDto commentRespDto = commentService.deleteComment(commentId);
 		
-		return new ResponseEntity<>(new ResponseDto<>(1, commentRespDto.getCommentId() + "번 comment 삭제 성공", null), HttpStatus.CREATED);
+		return new ResponseEntity<>(new ResponseDto<>(1, commentRespDto.getCommentId() + "번 comment 삭제 성공", null), HttpStatus.OK);
 	}
 	
 }
