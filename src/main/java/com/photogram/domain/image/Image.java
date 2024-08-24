@@ -8,6 +8,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.photogram.domain.comment.Comment;
 import com.photogram.domain.likes.Likes;
 import com.photogram.domain.user.User;
 
@@ -20,6 +21,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
@@ -59,6 +61,12 @@ public class Image {
 	
 	@Transient  // DB에 컬럼을 만들지 않는다.
 	private int likeCount;  // 2-10. 좋아요 수
+	
+	// 1-8. 댓글
+	@OrderBy("id desc") // 1-11. 내림 차순으로 정렬해서 가져오기
+	@JsonIgnoreProperties({"image"})
+	@OneToMany(mappedBy = "image")
+	private List<Comment> comments;
 	
 	@CreatedDate
  	@JsonFormat(pattern = "yyyy-MM-dd HH:mm")

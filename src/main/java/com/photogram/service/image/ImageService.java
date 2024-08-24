@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.photogram.domain.comment.CommentRepository;
 import com.photogram.domain.image.Image;
 import com.photogram.domain.image.ImageRepository;
 import com.photogram.domain.likes.LikesRepository;
@@ -33,6 +34,8 @@ public class ImageService {
 	private final ImageRepository imageRepository;
 	
 	private final LikesRepository likesRepository;
+	
+	private final CommentRepository commentRepository;
 
 	@Value("${storyImg.path}")
 	private String uploadFolder;
@@ -88,8 +91,9 @@ public class ImageService {
 			});
 			
 		});
-		
-		Page<ImageRespDto> result = images.map( image -> new ImageRespDto(image));
+	
+		// 2024-08-20 : 전체 댓글 정보 가져와서 dto에 추가 : 이미지 아이디로 해당 이미지 아이디값을 가지고 있는 comment 리스트만 가져온다.
+		Page<ImageRespDto> result = images.map( image -> new ImageRespDto(image, commentRepository.findAllByImageId(image.getId())));
 		
 		if(result.getContent().size() == 0) {
 			return new ImageStoryListRespDto();
