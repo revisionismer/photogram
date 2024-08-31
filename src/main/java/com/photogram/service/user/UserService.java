@@ -63,13 +63,15 @@ public class UserService {
 				// 4-2. 이미지에 담겨있는 좋아요 데이터 가져오기
 				image.getLikes().forEach((like) -> {
 					// 4-3. 해당 이미지를 좋아요한 사람이 현재 로그인한 유저라면
-					if(like.getUser().getId() == findUser.getId()) {
+					if(like.getUser().getId().equals(findUser.getId())) {
 						// 4-4. 좋아요를 한 유저가 로그인한 유저라면 좋아요 상태 값을 true로 세팅 -> 로그인한 유저라면 story 페이지에서  이미지의 좋아요 하트 색깔을 빨간색으로 표시해주기 위해
 						image.setLikeState(true);
 					}
 					
-					image.setLikeCount(image.getLikes().size());
 				});
+
+				// 2024-08-29 : 위치 변경 -> .getLikes().forEach 안에서 밖으로 이동
+				image.setLikeCount(image.getLikes().size());
 				
 			});
 		
@@ -110,6 +112,22 @@ public class UserService {
 			
 			int subscribeCount = subscribeRepository.mSubscribeCount(pageUserId);
 			int subscribeState = subscribeRepository.mSubscribeState(principalId, pageUserId);
+			
+			images.forEach((image) -> {
+				// 4-2. 이미지에 담겨있는 좋아요 데이터 가져오기
+				image.getLikes().forEach((like) -> {
+					// 4-3. 해당 이미지를 좋아요한 사람이 현재 로그인한 유저라면
+					if(like.getUser().getId().equals(findUser.getId())) {
+						// 4-4. 좋아요를 한 유저가 로그인한 유저라면 좋아요 상태 값을 true로 세팅 -> 로그인한 유저라면 story 페이지에서  이미지의 좋아요 하트 색깔을 빨간색으로 표시해주기 위해
+						image.setLikeState(true);
+					}
+					
+				});
+				
+				// 2024-08-29 : 위치 변경 -> .getLikes().forEach 안에서 밖으로 이동
+				image.setLikeCount(image.getLikes().size());
+				
+			});
 			
 			// 2024-08-01
 			List<ImageRespDto> imagesDto = images.stream().map( (image) -> new ImageRespDto(image)).toList();

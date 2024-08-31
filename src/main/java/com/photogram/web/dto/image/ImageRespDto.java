@@ -42,7 +42,7 @@ public class ImageRespDto {
 		this.userId = image.getUser().getId();
 		this.username = image.getUser().getUsername();
 		this.profileImageUrl = image.getUser().getProfileImageUrl();
-		this.likeState = image.getLikeState();
+		this.likeState = image.getLikeCount() == 0 ? false : true;
 		this.totalLikeCount = image.getLikeCount();		
 	}
 	
