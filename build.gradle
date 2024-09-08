@@ -90,6 +90,9 @@ dependencies {
 	/* 19. spring security test */
 	implementation 'junit:junit:4.12'
 	testImplementation 'org.springframework.security:spring-security-test'
+
+	/* 20. oauth2-client : gradle 설정이 오프라인 모드인지 확인해 보고 의존성 추가하자*/
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 }
 
 tasks.named('test') {
