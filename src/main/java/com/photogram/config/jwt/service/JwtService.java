@@ -160,6 +160,8 @@ public class JwtService {
 					// 2-5. 쿠키에서 access_token 값 String으로 가져온다.
 					String access_token = cookie.getValue().toString();
 					
+					System.out.println("토큰 값 : " + access_token);
+					
 					try {
 						// 2-6. access_token에 들어있는 username 값을 가져온다.
 						String username = (String) Jwts.parserBuilder().setSigningKey(secretKeyBytes).build().parseClaimsJws(access_token).getBody().get("username");
@@ -181,7 +183,11 @@ public class JwtService {
 						
 						// 2-12. access_token 쿠키 제거
 						cookie.setMaxAge(0);
-						// 2-13. HttpServletResponse에 maxAge가 0인 access_token 쿠키 장착(쿠키 소멸)
+						
+						// 2-16. 모든 경로에서 쿠키 삭제, 2024-09-15 : 소셜 로그인시 쿠키 삭제가 제대로 안되어 추가. 
+						cookie.setPath("/");
+						
+						// 2-13. HttpServletResponse에 maxAge가 0인 access_token 쿠키 장착(쿠키 소멸)						
 						response.addCookie(cookie);
 						
 					} catch (ExpiredJwtException e) {

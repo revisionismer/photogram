@@ -114,8 +114,14 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 		// 1-11. 쿠키는 항상 도메인 주소가 루트("/")로 설정되어 있어야 모든 요청에서 사용 가능.
 		cookie.setPath("/");
 		cookie.setSecure(true);
+		
+		// 1-14. jsessionId 자동으로 붙는거 삭제.
+		Cookie jsessionId = new Cookie("JSESSIONID", null);
+		jsessionId.setMaxAge(0); // 쿠키의 expiration 타임을 0으로 하여 없앤다.
+		jsessionId.setPath("/"); // 모든 경로에서 삭제 됬음을 알린다.
 	
 		response.addCookie(cookie);
+		response.addCookie(jsessionId);
 		
 		// 1-12. 로그인 성공시 응답 객체 만들어 주기 1 : response객체 기본 세팅
 		response.setContentType("application/json");
@@ -123,6 +129,5 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 		
 		// 1-13. 로그인 성공시 story 페이지로 redirect
 		response.sendRedirect("http://localhost:3000/image/story");
-		
 	}
 }
