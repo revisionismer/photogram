@@ -27,7 +27,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
 	private final UserRepository userRepository;
 	
-	
 	@Override
 	public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
 		
@@ -60,17 +59,18 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 		Optional<User> userEntity = userRepository.findByUsername(username);
 		
 		if(userEntity.isEmpty()) {
-			User newUser = new User();
-			newUser.setUsername(username);
-			newUser.setName(oAuth2Response.getName());
-			newUser.setPassword(new BCryptPasswordEncoder().encode("1234"));
-			newUser.setEmail(oAuth2Response.getEmail());
-			newUser.setRole(UserEnum.USER);
-			newUser.setCreatedDate(LocalDateTime.now());
+			User user = new User();
+			user.setUsername(username);
+			user.setName(oAuth2Response.getName());
+			user.setPassword(new BCryptPasswordEncoder().encode("1234"));
+			user.setEmail(oAuth2Response.getEmail());
+			user.setRole(UserEnum.USER);
+			user.setCreatedDate(LocalDateTime.now());
 			
-			userRepository.save(newUser);
+			User newUser = userRepository.save(user);
 			
 			OAuth2UserRespDto oAuth2UserRespDto = new OAuth2UserRespDto();
+			oAuth2UserRespDto.setId(newUser.getId());
 			oAuth2UserRespDto.setUsername(username);
 			oAuth2UserRespDto.setName(oAuth2Response.getName());
 		
@@ -85,9 +85,10 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 			user.setUpdatedDate(LocalDateTime.now());
 			
 			OAuth2UserRespDto oAuth2UserRespDto = new OAuth2UserRespDto();
+			oAuth2UserRespDto.setId(user.getId());
 			oAuth2UserRespDto.setUsername(user.getUsername());
 			oAuth2UserRespDto.setName(user.getName());
-			oAuth2UserRespDto.setRole("ROLE_" + user.getRole());
+			oAuth2UserRespDto.setRole(user.getRole().toString());
 			
 			return new CustomOAuth2User(oAuth2UserRespDto);
 		}
