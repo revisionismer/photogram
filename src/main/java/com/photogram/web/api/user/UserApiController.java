@@ -83,4 +83,15 @@ public class UserApiController {
 		
 		return new ResponseEntity<>(new ResponseDto<>(1, "프로필 사진 변경 성공", userProfileRespDto), HttpStatus.OK);
 	}
+	
+	@GetMapping("/s/subscribeUserList") 
+	public ResponseEntity<?> subscribeUserList(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+		
+		User loginUser = principalDetails.getUser();
+		
+		List<UserInfoRespDto> result = userService.readSubscribeUserList(loginUser.getId());
+		
+		return new ResponseEntity<>(new ResponseDto<>(1, "구독 유저 리스트 정보 조회 성공", result), HttpStatus.OK);
+	}
+	
 }

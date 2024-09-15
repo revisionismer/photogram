@@ -13,7 +13,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.photogram.config.jwt.JwtProperties;
 import com.photogram.config.jwt.service.JwtService;
 import com.photogram.config.oauth.dto.CustomOAuth2User;
@@ -60,7 +59,8 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 		headers.put("alg", "HS256");
 		
 		// 1-3. JWT 토큰 만들기 2 : claims 부분 설정(토큰 안에 담을 내용)
-		Map<String, Object> claims = new HashMap<>();;
+		Map<String, Object> claims = new HashMap<>();
+		claims.put("id", customOAuth2User.getId());
 		claims.put("username", customOAuth2User.getUsername());
 		claims.put("name", customOAuth2User.getName());
 		claims.put("role", role);
@@ -121,20 +121,8 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 		response.setContentType("application/json");
 		response.setCharacterEncoding("utf-8");
 		
-		// 1-13. 응답해줄 Map형태의 객체
-		Map<String, Object> responseData = new HashMap<>();
-		
-		// 1-14. 응답 데이터 셋팅
-		responseData.put("code", 1);
-		responseData.put("message", "jwt 인증 성공");
-		responseData.put("username", customOAuth2User.getUsername());
-		responseData.put("role", role);
-		
-		// 1-15. ObjectMapper를 이용해 json형태의 String으로 변환
-		String result = new ObjectMapper().writeValueAsString(responseData);
-		
-		// 1-16. response에 write
-		response.getWriter().write(result);
+		// 1-13. 로그인 성공시 story 페이지로 redirect
+		response.sendRedirect("http://localhost:3000/image/story");
 		
 	}
 }

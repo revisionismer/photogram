@@ -201,5 +201,20 @@ public class UserService {
 		return new UserProfileRespDto(userEntity);
 				
 	}
+	
+	@Transactional(readOnly = true)
+	public List<UserInfoRespDto> readSubscribeUserList(Long principalId) {
+		
+		List<UserInfoRespDto> result = new ArrayList<>();
+		
+		List<User> list = userRepository.mSubscribeUserList(principalId);
+		
+		for(User user : list) {
+			result.add(new UserInfoRespDto(user));
+		}
+		
+		return result;
+		
+	}
 
 }
