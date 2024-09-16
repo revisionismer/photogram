@@ -46,7 +46,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 			// 1-5. 
 			oAuth2Response = new NaverResponse(oAuth2User.getAttributes());
 			
-		} else if(registrationId.equals("google")) { // 1-6. 1-2가 google이라면
+		} else if(registrationId.equals("google")) { // 1-6. 1-2가 google, secret-key : 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
 			oAuth2Response = new GoogleResponse(oAuth2User.getAttributes());
 		} else {
 			return null;
