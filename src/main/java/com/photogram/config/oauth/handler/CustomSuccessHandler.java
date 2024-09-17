@@ -127,7 +127,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 		response.setContentType("application/json");
 		response.setCharacterEncoding("utf-8");
 		
-		// 1-13. 로그인 성공시 story 페이지로 redirect
-		response.sendRedirect("http://localhost:3000/image/story");
+		// 1-13. 로그인 성공시 프로필 페이지로 redirect -> 페이스북 로그인때 리다이렉트후 url에 특수문자가 붙어버려서 이상하게 작동함 그래서 profile 페이지로 돌림
+		response.sendRedirect("http://localhost:3000/user/profile");
 	}
 }
