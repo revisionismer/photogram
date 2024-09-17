@@ -11,6 +11,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import com.photogram.config.oauth.dto.CustomOAuth2User;
+import com.photogram.config.oauth.dto.FacebookResponse;
 import com.photogram.config.oauth.dto.GoogleResponse;
 import com.photogram.config.oauth.dto.NaverResponse;
 import com.photogram.config.oauth.dto.OAuth2Response;
@@ -43,11 +44,11 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 		
 		// 1-3. 1-2가 네이버라면
 		if(registrationId.equals("naver")) {
-			// 1-5. 
-			oAuth2Response = new NaverResponse(oAuth2User.getAttributes());
-			
+			oAuth2Response = new NaverResponse(oAuth2User.getAttributes()); // 1-5. 
 		} else if(registrationId.equals("google")) { // 1-6. 1-2가 google, secret-key : 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
 			oAuth2Response = new GoogleResponse(oAuth2User.getAttributes());
+		} else if(registrationId.equals("facebook")) {
+			oAuth2Response = new FacebookResponse(oAuth2User.getAttributes());
 		} else {
 			return null;
 		}
