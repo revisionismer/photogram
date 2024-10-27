@@ -14,3 +14,4 @@
 12. OAuth2 네이버 로그인시 jSessionId 붙는거 삭제, 로그아웃 로직시 cookie가 모든 요청에서 삭제되게 경로 추가
 13. OAuth2 구글 로그인 구현 완료
 14. OAuth2 페이스북 로그인 구현 완료
+15. .gitignore 파일 추가
