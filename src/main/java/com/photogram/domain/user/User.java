@@ -1,22 +1,27 @@
 package com.photogram.domain.user;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.photogram.constant.user.UserEnum;
+import com.photogram.domain.image.Image;
 import com.photogram.web.dto.user.UserReqDto.UserUpdateReqDto;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
@@ -57,7 +62,7 @@ public class User {
 	
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
-	private UserEnum role; // ADMIN, CUSTOMER // 1-11. 권한
+	private UserEnum role; // ADMIN, USER // 1-11. 권한
 
 	@CreatedDate
  	@JsonFormat(pattern = "yyyy-MM-dd HH:mm")
@@ -72,9 +77,9 @@ public class User {
  	private String refreshToken;
 	
 	// 1-14. image 엔티티 양방향 매핑 mappedBy 속성의 의미는 나는 연관관계의 주인이 아니므로 DB에 테이블을 만들지 말라는 뜻.
-//	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)  // 1-15. Lazy 전략은 image를 get할때만 같이 select 하라는 의미.
-//	@JsonIgnoreProperties({"user"})  // 1-16. image 엔티티에 있는 user는 또 불러오지 않는다.(무한참조)
-//	private List<Image> images;
+	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)  // 1-15. Lazy 전략은 image를 get할때만 같이 select 하라는 의미.
+	@JsonIgnoreProperties({"user"})  // 1-16. image 엔티티에 있는 user는 또 불러오지 않는다.(무한참조)
+	private List<Image> images;
 
 	// 1-15. AOP 처리시 User 객체 따로 sysout 해보고 싶을 때 toString 커스터마이징(images 제거)
 	@Override

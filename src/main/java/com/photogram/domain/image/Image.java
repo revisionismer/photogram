@@ -46,9 +46,9 @@ public class Image {
 	
 	private String name; // 2-3. original 이미지 이름
 	
-	private String storyImageUrl;  // 2-4. 실제 사진이 저장된 pc내 폴더 경로
+	private String storyImageUrl;  // 2-4. 실제 사진이 저장된 pc내 폴더 경로값과 저장으로 생성된 이미지 파일의 이름을 더한 문자열
 
-	@JoinColumn(name = "userId")
+	@JoinColumn(name = "userId")  // @JoinColumn : 연관관계의 주인이라는 뜻, Object를 선언할때는 외래키의 이름을 지정
 	@ManyToOne(fetch = FetchType.EAGER)
 	private User user;  // 2-5. 유저 정보
 	

@@ -23,7 +23,7 @@ public class CustomResponseUtil {  // 2023-06-01 : 여기까지
 			response.setContentType("application/json; charset=utf-8");  // 1-4. response 타입을 json으로 
 			response.setStatus(401);  // 1-5. httpstatus code 401 등록
 			response.getWriter().print(responseBody);  // 1-6. 1-3을 response 객체에 장착
-		}catch (Exception e) {
+		} catch (Exception e) {
 			log.error("서버 파싱 에러");
 		}
 	}
@@ -39,7 +39,7 @@ public class CustomResponseUtil {  // 2023-06-01 : 여기까지
 			response.setContentType("application/json; charset=utf-8"); 
 			response.setStatus(403);  
 			response.getWriter().print(responseBody);  
-		}catch (Exception e) {
+		} catch (Exception e) {
 			log.error("서버 파싱 에러");
 		}
 	}
