@@ -18,7 +18,7 @@ import lombok.ToString;
 public class SignUpReqDto {
 
 	@Size(min = 2, max = 20)
-	@NotBlank
+	@NotBlank  // NULL, 빈 문자열, 스페이스만 있는 문자열 필터링
 	private String username;
 	
 	@NotBlank(message = "비밀번호는 공백일 수 없습니다.")

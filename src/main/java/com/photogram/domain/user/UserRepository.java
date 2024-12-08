@@ -12,8 +12,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	// 1-1. JPA Query Method
 	Optional<User> findByUsername(String username);
 	
-	
-	//
 	@Query(value = "SELECT * FROM user_tb WHERE id IN (SELECT toUserId FROM subscribe_tb WHERE fromUserId = :principalId)", nativeQuery = true)
 	List<User> mSubscribeUserList(@Param(value = "principalId") Long principalId);
 	
