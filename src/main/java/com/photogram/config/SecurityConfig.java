@@ -69,7 +69,7 @@ public class SecurityConfig {
 		log.info("filterChain 빈 등록 완료");
 		return http
 				.headers( (header) -> header.frameOptions( (frameOption) -> frameOption.disable() ) )  // 1-5. http iframe 허용 X
-				.csrf( (csrf) -> csrf.disable() )  // 1-6. csrf 비활성화
+				.csrf( (csrf) -> csrf.disable() )  // 1-6. csrf 비활성화(postman요청이든 웹페이지에서 요청한거든 구분하지 않겠다)
 				.cors( (cors) -> cors.configurationSource(configurationSource()) )  // 1-7. custom cors 설정 등록
 				.sessionManagement( (sessionManagement) -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS) )  // 1-8. jSessionId를 서버에서 관리하지 않는다는 뜻으로, 세션 응답이 종료되면 사라진다는 뜻.(무상태성 설정) : jwt인증을 구현할거기 때문에 추가
 				.formLogin( (formLogin) -> formLogin.disable() )  // 1-9. 폼 로그인 방식을 사용하지 않는다고 선언
@@ -99,9 +99,9 @@ public class SecurityConfig {
 		configuration.setAllowCredentials(true);  // 2-5. 클라이언트쪽에서 쿠키 요청하는걸 허용(사용자 자격 증명이 지원되는지 여부)
 		configuration.addExposedHeader("Authorization");  // 2-6. 브라우저 버전이 바뀌면 default가 아닐 수도 있기 때문에 넣어준다.(2023-07-29)
 		
-		// 2-6. UrlBasedCorsConfigurationSource 객체 생성
+		// 2-7. UrlBasedCorsConfigurationSource 객체 생성
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		source.registerCorsConfiguration("/**", configuration);  // 2-7. 모든 주소 요청시 CorsConfiguration 설정을 적용.
+		source.registerCorsConfiguration("/**", configuration);  // 2-8. 모든 주소 요청시 CorsConfiguration 설정을 적용.
 	
 		
 		return source;

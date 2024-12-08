@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import com.photogram.domain.comment.CommentRepository;
 import com.photogram.domain.image.Image;
@@ -61,13 +62,14 @@ public class ImageService {
 		try {
 			Files.write(imageFilePath, imageUploadReqDto.getFile().getBytes());
 		} catch (Exception e) {
-			e.printStackTrace();
+			// 1-11. Exception을 던져주는 로직으로 변경 : 2024-12-05
+			throw new MaxUploadSizeExceededException(1000);
 		}
 				
-		// 1-6. 매개변수로 전달된 정보를 Image entity로 변환(Builder 패턴 이용)
+		// 1-9. 매개변수로 전달된 정보를 Image entity로 변환(Builder 패턴 이용)
 		Image image = imageUploadReqDto.toEntity(originalFileName, imageFileName, loginUser);
 				
-		// 1-7. image 엔티티 영속화하고 반환받는다.
+		// 1-10. image 엔티티 영속화하고 반환받는다.
 		Image storyImage = imageRepository.save(image);
 		
 		return new ImageUploadRespDto(storyImage, loginUser);
@@ -118,6 +120,7 @@ public class ImageService {
 			int totalLikeCount = likesRepository.mTotalLikeCount(imageId);
 			
 			return new LikesRespDto(findImage.getId(), principalId, message, totalLikeCount);
+			
 		} else {
 			throw new CustomApiException("이미지가 존재하지 않습니다.");
 		}
@@ -139,6 +142,7 @@ public class ImageService {
 			int totalLikeCount = likesRepository.mTotalLikeCount(imageId);
 			
 			return new LikesRespDto(findImage.getId(), principalId, message, totalLikeCount);
+			
 		} else {
 			throw new CustomApiException("이미지가 존재하지 않습니다.");
 		}
