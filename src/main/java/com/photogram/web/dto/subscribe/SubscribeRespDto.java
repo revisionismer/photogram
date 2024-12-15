@@ -32,11 +32,13 @@ public class SubscribeRespDto {
 
 	}
 	
-	public SubscribeRespDto(SubscribeQLRMRespDto dto) {
-		this.id = dto.getId();
-		this.username = dto.getUsername();
-		this.profileImageUrl = dto.getProfileImageUrl();
-		this.subscribeState = dto.getSubscribeState() == 1 ? true : false;
-		this.equalUserState = dto.getEqualUserState() == 1 ? true : false;
+	public SubscribeRespDto(SubscribeQLRMRespDto subscribeQLRMRespDto) {
+		this.id = subscribeQLRMRespDto.getId();
+		this.username = subscribeQLRMRespDto.getUsername();
+		this.profileImageUrl = subscribeQLRMRespDto.getProfileImageUrl();
+		
+		this.toUserId = subscribeQLRMRespDto.getToUserId();
+		this.subscribeState = subscribeQLRMRespDto.getSubscribeState() == 1 ? true : false;
+		this.equalUserState = subscribeQLRMRespDto.getEqualUserState() == 1 ? true : false;
 	}
 }
