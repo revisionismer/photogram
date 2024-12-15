@@ -92,7 +92,8 @@ public class SubscribeService {
 		sb.append("SELECT ");
 		sb.append(	"u.id, u.username, u.profileImageUrl, ");
 		sb.append(	"if((SELECT 1 FROM subscribe_tb WHERE fromUserId = ? AND toUserId = u.id), 1, 0) subscribeState, ");
-		sb.append(	"if((?=u.id), 1, 0) equalUserState ");
+		sb.append(	"if((?=s.fromUserId), 1, 0) equalUserState, ");
+		sb.append("  s.toUserId ");
 		sb.append("FROM ");
 		sb.append(	"user_tb u INNER JOIN subscribe_tb s ON u.id = s.toUserId ");
 		sb.append("WHERE ");

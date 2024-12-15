@@ -16,4 +16,6 @@ public class SubscribeQLRMRespDto {
     private Long subscribeState;
     private Long equalUserState; 
     
+    private Long toUserId;
+    
 }
