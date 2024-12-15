@@ -20,10 +20,8 @@ public class SubscribeRespDto {
 	private Long toUserId;
 	private boolean subscribeState;  
 	private boolean equalUserState;
-	
-	private int subscribeCount;
 
-	public SubscribeRespDto(Subscribe subscribe, Long principalId, Long pageUserId, int subscribeCount) {
+	public SubscribeRespDto(Subscribe subscribe, Long principalId, Long pageUserId) {
 		this.id = subscribe.getId();
 		this.username = subscribe.getToUser().getUsername();
 		this.profileImageUrl = subscribe.getToUser().getProfileImageUrl();
@@ -31,8 +29,7 @@ public class SubscribeRespDto {
 		this.toUserId = subscribe.getToUser().getId();
 		this.subscribeState = subscribe != null ? true : false;
 		this.equalUserState = principalId == pageUserId ? true : false;
-		
-		this.subscribeCount = subscribeCount;
+
 	}
 	
 	public SubscribeRespDto(SubscribeQLRMRespDto dto) {
