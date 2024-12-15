@@ -77,9 +77,7 @@ public class SubscribeService {
 		List<SubscribeRespDto> result = new ArrayList<>(); 
 		
 		for(Subscribe subscribe : subscribes) {
-			
-			result.add(new SubscribeRespDto(subscribe, loginUser.getId(), pageUserId, subscribes.size()));
-			
+			result.add(new SubscribeRespDto(subscribe, loginUser.getId(), pageUserId));		
 		}
 		
 		return result;
@@ -100,25 +98,27 @@ public class SubscribeService {
 		sb.append("WHERE ");
 		sb.append(	"s.fromUserId = ?");
 		
-		// 1-5. 첫번째 물음표 : principalId 
-		// 1-6. 두번째 물음표 : principalId
-		// 1-7. 마지막 물음표 : pageUserId
+		// 1-2. 첫번째 물음표 : principalId : loginUser.getId()
+		// 1-3. 두번째 물음표 : principalId : loginUser.getId()
+		// 1-4. 마지막 물음표 : pageUserId
 		
-		// 1-2. 쿼리 완성
+		// 1-5. 쿼리 완성
 		Query query = em.createNativeQuery(sb.toString())
 						.setParameter(1, loginUser.getId())
 						.setParameter(2, loginUser.getId())
 						.setParameter(3, pageUserId);
 		
-		// 1-3. 쿼리 실행(qlrm 라이브러리 이용, dto에 DB 결과값을 매핑시키기 위해서)
+		// 1-6. JpaResultMapper 객체 생성(qlrm 라이브러리 이용, dto에 DB 결과값을 매핑시키기 위해서)
 		JpaResultMapper jrm = new JpaResultMapper();
-		
-		// 2024-12-13 : 여기서부터 다시
-		List<SubscribeQLRMRespDto> list = jrm.list(query, SubscribeQLRMRespDto.class);
+	
+		// 1-7. 1-5로 만든 쿼리를 JpaResultMapper 클래스에서 뽑고 싶은 dto 객체 클래스랑 같이 넣어서 뽑아온다.
+		List<SubscribeQLRMRespDto> subscribeQLRMRespDtos = jrm.list(query, SubscribeQLRMRespDto.class);
 
+		// 1-8. SubscribeRespDto형태로 변환해서 반환하기 위해 선언
 		List<SubscribeRespDto> result = new ArrayList<>();
 		
-		for(SubscribeQLRMRespDto subscribeQLRMRespDto : list) {
+		// 1-9. 향상된 for문으로 SubscribeQLRMRespDto 클래스를 SubscribeRespDto 클래스로 변환해서 추가.
+		for(SubscribeQLRMRespDto subscribeQLRMRespDto : subscribeQLRMRespDtos) {
 			result.add(new SubscribeRespDto(subscribeQLRMRespDto));
 		}
 		
