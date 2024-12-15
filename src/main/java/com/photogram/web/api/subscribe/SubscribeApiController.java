@@ -57,11 +57,11 @@ public class SubscribeApiController {
 		
 		User loginUser = principalDetails.getUser();
 		
-		List<SubscribeRespDto> subscribeRespDtos = subscribeService.subscribeList(loginUser, pageUserId);
+//		List<SubscribeRespDto> subscribeRespDtos = subscribeService.subscribeList(loginUser, pageUserId);
 		
-//		List<SubscribeRespDto> subscribeQLRMRespDtos = subscribeService.subscribeListByQLRM(loginUser, pageUserId);
+		List<SubscribeRespDto> subscribeQLRMRespDtos = subscribeService.subscribeListByQLRM(loginUser, pageUserId);
 		
-		return new ResponseEntity<>(new ResponseDto<>(1, pageUserId + "번 유저의 구독자 정보 리스트 불러오기 성공", subscribeRespDtos), HttpStatus.OK);
+		return new ResponseEntity<>(new ResponseDto<>(1, pageUserId + "번 유저의 구독자 정보 리스트 불러오기 성공", subscribeQLRMRespDtos), HttpStatus.OK);
 	}
 	
 }
